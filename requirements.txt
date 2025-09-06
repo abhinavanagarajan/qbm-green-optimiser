@@ -1,0 +1,6 @@
+numpy==1.23.5
+pennylane==0.30.1
+pennylane-qiskit==0.30.1
+qiskit==0.39.1
+scikit-learn==1.2.2
+plotly==5.15.0
