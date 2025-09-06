@@ -1,1 +1,3 @@
-# qbm-green-optimiser
+# QBM Green Optimiser
+
+Quantum Boltzmann Machines used.
