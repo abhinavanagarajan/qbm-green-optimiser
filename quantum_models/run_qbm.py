@@ -1,14 +1,52 @@
 import numpy as np
-from qbm_model import train_qbm, sample_qbm
+from qbm_model import (
+    load_and_preprocess_data,
+    train_qbm,
+    analyze_sustainability,
+    get_adaptation_score
+)
 
-# Simulated Dataset
-X_train = np.random.uniform(low=0.0, high=1.0, size=(500, 6))   # Pollution + Greenery + Geo Features
-y_train = np.random.uniform(low=0.0, high=1.0, size=(500, 4))  # Latent variables
+def print_plant_insights(insights, recommendations, adaptation_score):
+    """Print detailed sustainability insights and recommendations."""
+    print("\n=== Plant Sustainability Analysis ===")
+    print(f"\nOverall Adaptation Score: {adaptation_score:.1f}%\n")
+    
+    print("📊 Sustainability Metrics:")
+    metrics = {
+        'carbon_efficiency': ('Carbon Capture Efficiency', '🌳'),
+        'sequestration_potential': ('CO2 Sequestration Potential', '💨'),
+        'air_quality_impact': ('Air Quality Impact', '🌬️'),
+        'pollution_resistance': ('Pollution Resistance', '🛡️'),
+        'soil_health': ('Soil Health', '🌱'),
+        'light_efficiency': ('Light Utilization', '☀️')
+    }
+    
+    for key, (label, emoji) in metrics.items():
+        value = insights[key]
+        bars = '█' * int(value * 20)
+        spaces = '░' * (20 - int(value * 20))
+        print(f"{emoji} {label}: {bars}{spaces} {value*100:.1f}%")
+    
+    if recommendations:
+        print("\n🔍 Recommendations for Improvement:")
+        for i, rec in enumerate(recommendations, 1):
+            print(f"{i}. {rec}")
 
-print("🔧 Training Quantum Boltzmann Machine...")
-trained_params = train_qbm(X_train, y_train, epochs=200, stepsize=0.1)
+def main():
+    print("Loading and preprocessing data...")
+    X_train, y_train, scaler, category_mapping = load_and_preprocess_data()
+    
+    print("\n🧠 Training Quantum Boltzmann Machine...")
+    trained_params = train_qbm(X_train, y_train)
+    
+    # Generate sample input (you can modify these values)
+    sample_input = X_train[0]  # Using first data point as example
+    
+    print("\n📈 Analyzing plant sustainability...")
+    insights, recommendations = analyze_sustainability(trained_params, sample_input, scaler, category_mapping)
+    adaptation_score = get_adaptation_score(insights)
+    
+    print_plant_insights(insights, recommendations, adaptation_score)
 
-print("\n🎯 Sampling New Synthetic Pollution Scenario...")
-sample_input = np.random.uniform(size=6)
-sampled_output = sample_qbm(trained_params, sample_input)
-print("📊 Sampled Latent Variables:", sampled_output)
+if __name__ == "__main__":
+    main()
